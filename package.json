@@ -1,0 +1,38 @@
+{
+  "name": "datacom-ai-assistant-next-app",
+  "engines": {
+    "node": "20.11.1"
+  },
+  "version": "5.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "post-update": "echo \"codesandbox preview only, need an update\" && pnpm update --latest"
+  },
+  "dependencies": {
+    "@emotion/cache": "latest",
+    "@emotion/react": "latest",
+    "@emotion/styled": "latest",
+    "@mui/icons-material": "latest",
+    "@mui/material": "latest",
+    "@mui/material-nextjs": "latest",
+    "axios": "^1.7.2",
+    "markdown-to-jsx": "^7.4.7",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "valtio": "^1.13.2"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "eslint": "latest",
+    "eslint-config-next": "latest",
+    "raw-loader": "^4.0.2",
+    "typescript": "latest"
+  }
+}
