@@ -20,6 +20,7 @@
     "@mui/material": "latest",
     "@mui/material-nextjs": "latest",
     "axios": "^1.7.2",
+    "http-proxy-middleware": "^3.0.0",
     "markdown-to-jsx": "^7.4.7",
     "next": "latest",
     "react": "latest",

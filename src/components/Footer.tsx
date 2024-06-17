@@ -4,59 +4,62 @@ import { BottomNavigation, BottomNavigationAction, Box } from "@mui/material";
 import { useState } from "react";
 
 const Footer = () => {
-  const [value, setValue] = useState("recents");
+  const [value, setValue] = useState("");
 
   return (
-    <BottomNavigation
-      value={value}
-      onChange={(event, newValue) => {
-        setValue(newValue);
-      }}
+    <Box
       sx={{
-        height: "15px",
-        position: "fixed",
-        bottom: "40px",
-        width: "90%",
+        width: "100%",
         display: "flex",
         justifyContent: "center",
-        zIndex: -1,
       }}
     >
-      <BottomNavigationAction
-        sx={{
-          maxWidth: "3px",
-          minWidth: "2px",
+      <BottomNavigation
+        value={value}
+        onChange={(event, newValue) => {
+          setValue(newValue);
         }}
-        icon={
-          <Box
-            component="img"
-            sx={{
-              height: 10,
-              width: 10,
-            }}
-            alt="Current"
-            src={"./images/icons/path-1.jpg"}
-          />
-        }
-      />
-      <BottomNavigationAction
         sx={{
-          maxWidth: "3px",
-          minWidth: "2px",
+          bottom: "20px",
+          position: "absolute",
         }}
-        icon={
-          <Box
-            component="img"
-            sx={{
-              height: 10,
-              width: 10,
-            }}
-            alt="Next"
-            src={"./images/icons/path-2.jpg"}
-          />
-        }
-      />
-    </BottomNavigation>
+      >
+        <BottomNavigationAction
+          sx={{
+            maxWidth: "3px",
+            minWidth: "2px",
+          }}
+          icon={
+            <Box
+              component="img"
+              sx={{
+                height: 10,
+                width: 10,
+              }}
+              alt="Current"
+              src={"./images/icons/path-1.jpg"}
+            />
+          }
+        />
+        <BottomNavigationAction
+          sx={{
+            maxWidth: "3px",
+            minWidth: "2px",
+          }}
+          icon={
+            <Box
+              component="img"
+              sx={{
+                height: 10,
+                width: 10,
+              }}
+              alt="Next"
+              src={"./images/icons/path-2.jpg"}
+            />
+          }
+        />
+      </BottomNavigation>
+    </Box>
   );
 };
 export default Footer;
