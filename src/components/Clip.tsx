@@ -4,7 +4,7 @@ import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import PictureAsPdfOutlinedIcon from "@mui/icons-material/PictureAsPdfOutlined";
 import FolderCopyOutlinedIcon from "@mui/icons-material/FolderCopyOutlined";
 
-const Clip = ({ fetchFile }) => {
+const Clip = ({ fetchFile: {} }): {} => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [fileBase64, setFfileBase64] = useState<string>("");
   const open = Boolean(anchorEl);
