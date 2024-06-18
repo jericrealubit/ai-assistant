@@ -16,12 +16,17 @@ const Clip = ({ fetchFile: {} }): {} => {
     setAnchorEl(null);
   };
 
+  interface HTMLInputEvent extends Event {
+    target: HTMLInputElement & EventTarget;
+  }
+
   //------------------------------------------------------------------------------
 
   // onChange listener
-  function handleFileChange(event: React.MouseEvent<HTMLButtonElement>) {
+  function handleFileChange(event?: HTMLInputEvent) {
+    const files: any = event.target.files[0];
     const promises = [];
-    for (const file of event.target?.files) promises.push(readFile(file));
+    for (const file of files) promises.push(readFile(file));
     Promise.all(promises).then(lastStep);
   }
 
