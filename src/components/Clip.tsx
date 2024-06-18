@@ -19,14 +19,14 @@ const Clip = ({ fetchFile: {} }): {} => {
   //------------------------------------------------------------------------------
 
   // onChange listener
-  function handleFileChange(event) {
+  function handleFileChange(event: React.MouseEvent<HTMLButtonElement>) {
     const promises = [];
-    for (const file of event.target.files) promises.push(readFile(file));
+    for (const file of event.target?.files) promises.push(readFile(file));
     Promise.all(promises).then(lastStep);
   }
 
   // read one file
-  function readFile(f) {
+  function readFile(f: File) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(f);
@@ -43,7 +43,7 @@ const Clip = ({ fetchFile: {} }): {} => {
   }
 
   // example last step
-  function lastStep(data) {
+  function lastStep(data: {}) {
     console.log("last step");
     console.log(data);
     const res = fetchFile({
