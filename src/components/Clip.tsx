@@ -4,7 +4,7 @@ import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import PictureAsPdfOutlinedIcon from "@mui/icons-material/PictureAsPdfOutlined";
 import FolderCopyOutlinedIcon from "@mui/icons-material/FolderCopyOutlined";
 
-const Clip = ({ fetchFile: {} }): {} => {
+const Clip = ({ fetchFile }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [fileBase64, setFfileBase64] = useState<string>("");
   const open = Boolean(anchorEl);
@@ -16,22 +16,17 @@ const Clip = ({ fetchFile: {} }): {} => {
     setAnchorEl(null);
   };
 
-  interface HTMLInputEvent extends Event {
-    target: HTMLInputElement & EventTarget;
-  }
-
   //------------------------------------------------------------------------------
 
   // onChange listener
-  function handleFileChange(event?: HTMLInputEvent) {
-    const files: any = event.target.files[0];
+  function handleFileChange(event) {
     const promises = [];
-    for (const file of files) promises.push(readFile(file));
+    for (const file of event.target.files) promises.push(readFile(file));
     Promise.all(promises).then(lastStep);
   }
 
   // read one file
-  function readFile(f: File) {
+  function readFile(f) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(f);
@@ -48,7 +43,7 @@ const Clip = ({ fetchFile: {} }): {} => {
   }
 
   // example last step
-  function lastStep(data: {}) {
+  function lastStep(data) {
     console.log("last step");
     console.log(data);
     const res = fetchFile({
@@ -75,32 +70,23 @@ const Clip = ({ fetchFile: {} }): {} => {
   });
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        bottom: "220px",
-        right: "130px",
-      }}
-    >
+    <div>
       <Button
         id="basic-button"
         aria-controls={open ? "basic-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
+        sx={{ justifyContent: "right" }}
       >
         <Box
           title={"Attach file"}
           component="img"
           sx={{
-            height: "25px",
-            position: "fixed",
-            bottom: "40px",
-            width: "25px",
-            right: "40px",
+            height: "30px",
           }}
           alt="attache file"
-          src={"./images/icons/clip.jpg"}
+          src={"./images/icons/paperclip.png"}
         />
       </Button>
 
@@ -111,15 +97,9 @@ const Clip = ({ fetchFile: {} }): {} => {
         onClose={handleClose}
         MenuListProps={{
           "aria-labelledby": "basic-button",
-          sx: {},
         }}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
+        sx={{
+          top: "-60px",
         }}
       >
         <MenuItem

@@ -25,7 +25,7 @@ export default async function handler(
     const config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "https://agent-chat-q-string.australiaeast.inference.ml.azure.com/score",
+      url: `${process.env.BASE_URL}`,
       headers: {
         Authorization: `Bearer ${process.env.API_KEY}`, //use the .env.local file to put the bearer token in here. Then once its deployed in the static web app it should be on the configuration section
         "Content-Type": "application/json",

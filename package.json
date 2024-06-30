@@ -1,7 +1,7 @@
 {
   "name": "datacom-ai-assistant-next-app",
   "engines": {
-    "node": "20.12.2"
+    "node": "20.11.1"
   },
   "version": "5.0.0",
   "private": true,
