@@ -20,9 +20,13 @@ const Clip = ({ fetchFile: {} }) => {
 
   // onChange listener
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
-    const promises = [];
-    for (const file of event.target.files) promises.push(readFile(file));
-    Promise.all(promises).then(() => lastStep(file));
+    if (event.target.files instanceof FileList) {
+      const promises = [];
+      for (const file of event.target.files) promises.push(readFile(file));
+      Promise.all(promises).then(() => lastStep(file));
+    } else {
+      return;
+    }
   }
 
   // read one file
