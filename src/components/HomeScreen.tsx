@@ -136,28 +136,10 @@ const HomeScreen = () => {
     setChatAgentIcon(agent.name);
   };
 
-  // const insertAfter = (referenceNode: HTMLElement, newNode: HTMLElement) => {
-  //   if (referenceNode.parentNode) {
-  //     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-  //   }
-  // };
-
-  // const handleApiCall = async (q: string) => {
-  //   console.log(chatItems);
-  //   console.log({ q });
-  //   let temp = [...chatItems, q];
-  //   console.log({ temp });
-  //   setChatItems([...temp]);
-  //   console.log({ chatItems });
-  //   temp = [...temp, ...["ddd"]];
-  //   console.log({ temp });
-  //   setChatItems(temp);
-  //   console.log({ chatItems });
-  // };
-
   const handleKeyDown = (e) => {
-    if (e.keyCode == 13) {
-      handleApiCall(e);
+    console.log(e.target.value);
+    if (e.keyCode == 13 && e.target.value.length > 0) {
+      handleApiCall(e.target.value);
     }
   };
 
@@ -174,25 +156,35 @@ const HomeScreen = () => {
     }, 0);
   }
 
+  // handleApiCall =================================================================================================
   const handleApiCall = async (q: string) => {
-    //scrollDown();
-
-    scrollToBottom();
-
-    setChatItems((chatItems) => [...chatItems, q]);
-
-    setPreviousQuery(q);
-    setPageDisplay("revert");
     setQuery("");
+    setChatItems((chatItems) => [...chatItems, q]);
+    //get url from string
+    let url = "";
+    url = q.split(" ").find((word) => word.startsWith("http"));
+
+    setPageDisplay("revert");
+    setPreviousQuery(q);
+    scrollToBottom();
     setAgentPlaceholder("Ask follow up...");
+
+    if (url === undefined) {
+      setChatItems((chatItems) => [
+        ...chatItems,
+        "Topic is required, please include a URL in the chat, it should start with 'http'.",
+      ]);
+      return;
+    }
+
     setThinking(true);
     const data = {
       chat_history: chatItems,
-      Agent: "FinancePlanner",
+      Agent: chatAgentIcon,
       question: q,
-      topic:
-        "https://s201.q4cdn.com/287523651/files/doc_financials/2023/ar/cost-annual-report-final-pdf-from-dfin.pdf",
+      topic: url,
     };
+    // "https://s201.q4cdn.com/287523651/files/doc_financials/2023/ar/cost-annual-report-final-pdf-from-dfin.pdf",
 
     try {
       const response = await axios.post<any>("/api/agentChatResponse", data);
@@ -201,45 +193,13 @@ const HomeScreen = () => {
 
       setChatItems((chatItems) => [...chatItems, responseData]);
 
-      //scrollDown();
       scrollToBottom();
-      // if (chatBoxRef.current && queryInputRef.current) {
-      //   chatBoxRef.current.innerHTML = `AI: ${response.data.data.answer}`;
-      //   insertAfter(chatBoxRef.current, queryInputRef.current);
-      // }
     } catch (error) {
       console.error(error);
     }
     setThinking(false);
   };
-
-  // const handleApiCallChat = async (q: string) => {
-  //   setPreviousQuery(q);
-  //   setPageDisplay("revert");
-  //   setQuery("");
-  //   setAgentPlaceholder("Ask follow up...");
-  //   setThinking(true);
-  //   const data = {
-  //     chat_history: [],
-  //     Agent: "FinancePlanner",
-  //     question: q,
-  //     topic:
-  //       "https://s201.q4cdn.com/287523651/files/doc_financials/2023/ar/cost-annual-report-final-pdf-from-dfin.pdf",
-  //   };
-
-  //   // try {
-  //   //   const response = await axios.post<any>("/api/agentChatResponse", data);
-  //   //   setThinking(false);
-
-  //   //   if (chatBoxRef.current && queryInputRef.current) {
-  //   //     chatBoxRef.current.innerHTML = `AI: ${response.data.data.answer}`;
-  //   //     insertAfter(chatBoxRef.current, queryInputRef.current);
-  //   //   }
-  //   // } catch (error) {
-  //   //   console.error(error);
-  //   // }
-  //   setThinking(false);
-  // };
+  // handleApiCall =================================================================================================
 
   const handleChatAgentClick = (event) => {
     console.log(event.target.innerText.replace(/\s+/g, "-").toLowerCase());
@@ -497,7 +457,8 @@ const HomeScreen = () => {
                       onClick={() => handleChatAgentClick(event)}
                       display="inline"
                       sx={{
-                        fontWeight: "light",
+                        fontWeight:
+                          chatAgentIcon === agent.name ? "bold" : "light",
                         cursor: "pointer",
                         "&:hover": {
                           fontWeight: "bold",
@@ -510,24 +471,7 @@ const HomeScreen = () => {
                 );
               })}
             </Box>
-          </Box>
 
-          {/* chat-body */}
-          <Box
-            id="chat-body"
-            p={3}
-            mb={5}
-            sx={{
-              border: "1px solid white",
-              backgroundColor: "white",
-              borderRadius: "20px",
-              top: "170px",
-              width: "100%",
-              bottom: "-20px",
-              position: "absolute",
-              overflowY: "scroll",
-            }}
-          >
             {chatAgentIcon && (
               <Box
                 pr={2}
@@ -556,7 +500,24 @@ const HomeScreen = () => {
                 </Typography>
               </Box>
             )}
+          </Box>
 
+          {/* chat-body */}
+          <Box
+            id="chat-body"
+            p={3}
+            mb={5}
+            sx={{
+              border: "1px solid white",
+              backgroundColor: "white",
+              borderRadius: "20px",
+              top: "190px",
+              width: "100%",
+              bottom: "-20px",
+              position: "absolute",
+              overflowY: "scroll",
+            }}
+          >
             {/* chat conversation ===================================================================== */}
             <Box>
               <Box>
@@ -594,30 +555,6 @@ const HomeScreen = () => {
                 <Box>Length: {uploadedFile.base64.length}</Box>
               )}
             </Box>
-            {/* <Box id="actionIcons">
-              {query && !thinking && (
-                <Box title={"Send"}>
-                  <SendOutlinedIcon
-                    sx={{ cursor: "pointer", color: "gray" }}
-                    onClick={() => handleApiCall(query)}
-                  />
-                </Box>
-              )}
-              {thinking && (
-                <Box
-                  component="img"
-                  sx={{
-                    height: 12,
-                    width: 40,
-                    marginLeft: 1,
-                    color: "#7f8487",
-                    marginTop: "7px",
-                  }}
-                  alt="Industry Expert"
-                  src={"./images/icons/typing.gif"}
-                />
-              )}
-            </Box> */}
           </Box>
         </Box>
 
@@ -650,7 +587,6 @@ const HomeScreen = () => {
               justifyContent: "space-between",
             }}
           >
-            {/* <Grid container spacing={1}> */}
             {/* input */}
             <Grid xs={9} sx={{}}>
               <TextField
@@ -672,6 +608,7 @@ const HomeScreen = () => {
                   paddingRight: "20px",
                   paddingTop: "10px",
                 }}
+                onKeyDown={() => handleKeyDown(event)}
               />
             </Grid>
             {/* send icon */}
@@ -692,7 +629,6 @@ const HomeScreen = () => {
                         float: "inline-end",
                       }}
                       onClick={() => handleApiCall(query)}
-                      onKeyDown={() => handleKeyDown(event)}
                     />
                   ) : (
                     <SendIcon
@@ -707,7 +643,7 @@ const HomeScreen = () => {
                 </Box>
               )}
             </Grid>
-
+            {/* clip */}
             <Grid
               title="Attach File"
               xs={2}

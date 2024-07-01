@@ -19,6 +19,8 @@ const Clip = ({ fetchFile: {} }) => {
   //------------------------------------------------------------------------------
   interface File extends Blob {
     readonly name: string;
+    readonly filename: string;
+    readonly result: string;
   }
   // onChange listener
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
@@ -26,7 +28,7 @@ const Clip = ({ fetchFile: {} }) => {
       const promises = [];
       for (const file of event.target.files) promises.push(readFile(file));
 
-      Promise.all(promises).then((file) => {
+      Promise.all(promises).then(() => {
         const res = fetchFile({
           filename: file[0].filename,
           base64: file[0].result,
