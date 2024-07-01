@@ -23,7 +23,8 @@ const Clip = ({ fetchFile: {} }) => {
     if (event.target.files instanceof FileList) {
       const promises = [];
       for (const file of event.target.files) promises.push(readFile(file));
-      Promise.all(promises).then(() => lastStep(file));
+
+      Promise.all(promises).then((file) => console.log(file));
     } else {
       return;
     }
