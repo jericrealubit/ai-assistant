@@ -17,21 +17,31 @@ const Clip = ({ fetchFile: {} }) => {
   };
 
   //------------------------------------------------------------------------------
-
+  interface File extends Blob {
+    readonly name: string;
+  }
   // onChange listener
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files instanceof FileList) {
       const promises = [];
       for (const file of event.target.files) promises.push(readFile(file));
 
-      Promise.all(promises).then((file) => console.log(file));
+      Promise.all(promises).then((file) => {
+        const res = fetchFile({
+          filename: file[0].filename,
+          base64: file[0].result,
+        });
+        console.log(res);
+
+        setAnchorEl(null);
+      });
     } else {
       return;
     }
   }
 
   // read one file
-  function readFile(f: Blob) {
+  function readFile(f: File) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(f);
@@ -48,17 +58,17 @@ const Clip = ({ fetchFile: {} }) => {
   }
 
   // example last step
-  function lastStep(data: { filename: string; result: string }[]) {
-    console.log("last step");
-    console.log(data);
-    const res = fetchFile({
-      filename: data[0].filename,
-      base64: data[0].result,
-    });
-    console.log(res);
+  // function lastStep(data: { filename: string; result: string }[]) {
+  //   console.log("last step");
+  //   console.log(data);
+  //   const res = fetchFile({
+  //     filename: data[0].filename,
+  //     base64: data[0].result,
+  //   });
+  //   console.log(res);
 
-    setAnchorEl(null);
-  }
+  //   setAnchorEl(null);
+  // }
 
   //------------------------------------------------------------------------------
 
@@ -137,3 +147,6 @@ const Clip = ({ fetchFile: {} }) => {
   );
 };
 export default Clip;
+function fetchFile(arg0: { filename: any; base64: any }) {
+  throw new Error("Function not implemented.");
+}
