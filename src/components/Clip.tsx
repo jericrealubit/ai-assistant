@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Box, styled, MenuItem, Menu, Button } from "@mui/material";
 import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import PictureAsPdfOutlinedIcon from "@mui/icons-material/PictureAsPdfOutlined";
@@ -19,14 +19,14 @@ const Clip = ({ fetchFile: {} }) => {
   //------------------------------------------------------------------------------
 
   // onChange listener
-  function handleFileChange(event) {
+  function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     const promises = [];
     for (const file of event.target.files) promises.push(readFile(file));
-    Promise.all(promises).then(lastStep);
+    Promise.all(promises).then(() => lastStep(file));
   }
 
   // read one file
-  function readFile(f) {
+  function readFile(f: Blob) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(f);
@@ -43,7 +43,7 @@ const Clip = ({ fetchFile: {} }) => {
   }
 
   // example last step
-  function lastStep(data) {
+  function lastStep(data: { filename: string; result: string }[]) {
     console.log("last step");
     console.log(data);
     const res = fetchFile({
