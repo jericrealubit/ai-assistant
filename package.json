@@ -1,7 +1,7 @@
 {
   "name": "datacom-ai-assistant-next-app",
   "engines": {
-    "node": "20.12.2"
+    "node": "20.11.1"
   },
   "version": "5.0.0",
   "private": true,
@@ -16,7 +16,7 @@
     "@emotion/cache": "latest",
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
-    "@mui/icons-material": "^5.15.21",
+    "@mui/icons-material": "latest",
     "@mui/material": "latest",
     "@mui/material-nextjs": "latest",
     "axios": "^1.7.2",

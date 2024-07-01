@@ -1,4 +1,3 @@
-// pages/api/tavilyResponse.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
 
@@ -12,15 +11,22 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   if (req.method === "POST") {
-    const { question, chat_history } = req.body;
+    const { question, chat_history, Agent, topic } = req.body;
 
     const data = JSON.stringify({
-      chat_history: [],
-      Agent: "FinancePlanner",
-      question: "name of company in report",
-      topic:
-        "https://s201.q4cdn.com/287523651/files/doc_financials/2023/ar/cost-annual-report-final-pdf-from-dfin.pdf",
+      chat_history,
+      Agent,
+      question,
+      topic,
     });
+
+    // const data = JSON.stringify({
+    //   chat_history: [],
+    //   Agent: "FinancePlanner",
+    //   question: "name of company in report",
+    //   topic:
+    //     "https://s201.q4cdn.com/287523651/files/doc_financials/2023/ar/cost-annual-report-final-pdf-from-dfin.pdf",
+    // });
 
     const config = {
       method: "post",

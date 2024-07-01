@@ -1,14 +1,20 @@
-import { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState, MouseEvent } from "react";
 import { Box, styled, MenuItem, Menu, Button } from "@mui/material";
 import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import PictureAsPdfOutlinedIcon from "@mui/icons-material/PictureAsPdfOutlined";
 import FolderCopyOutlinedIcon from "@mui/icons-material/FolderCopyOutlined";
 
-const Clip = ({ fetchFile: {} }) => {
+// Define the type for the fetchFile function
+interface FetchFileProps {
+  fetchFile: (file: { filename: string; base64: string }) => void;
+}
+
+const Clip: React.FC<FetchFileProps> = ({ fetchFile }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [fileBase64, setFfileBase64] = useState<string>("");
+  const [fileBase64, setFileBase64] = useState<string>("");
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -16,63 +22,47 @@ const Clip = ({ fetchFile: {} }) => {
     setAnchorEl(null);
   };
 
-  //------------------------------------------------------------------------------
-  interface File extends Blob {
-    readonly name: string;
-    readonly filename: string;
-    readonly result: string;
-  }
-  // onChange listener
-  function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
-    if (event.target.files instanceof FileList) {
-      const promises = [];
-      for (const file of event.target.files) promises.push(readFile(file));
-
-      Promise.all(promises).then(() => {
-        const res = fetchFile({
-          filename: file[0].filename,
-          base64: file[0].result,
-        });
-        console.log(res);
-
-        setAnchorEl(null);
-      });
-    } else {
-      return;
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const promises = Array.from(files).map(readFile);
+      Promise.all(promises).then(lastStep);
     }
-  }
+  };
 
-  // read one file
-  function readFile(f: File) {
-    return new Promise((resolve, reject) => {
+  const readFile = (file: File) => {
+    return new Promise<{
+      result: string | ArrayBuffer | null;
+      filename: string;
+    }>((resolve, reject) => {
       const reader = new FileReader();
-      reader.readAsDataURL(f);
+      reader.readAsDataURL(file);
 
       reader.onload = (event) => {
-        return resolve({
-          result: event?.target?.result,
-          filename: f.name,
+        resolve({
+          result: event?.target?.result ?? null, // Ensure result is not undefined
+          filename: file.name,
         });
       };
 
       reader.onerror = reject;
     });
-  }
+  };
 
-  // example last step
-  // function lastStep(data: { filename: string; result: string }[]) {
-  //   console.log("last step");
-  //   console.log(data);
-  //   const res = fetchFile({
-  //     filename: data[0].filename,
-  //     base64: data[0].result,
-  //   });
-  //   console.log(res);
-
-  //   setAnchorEl(null);
-  // }
-
-  //------------------------------------------------------------------------------
+  const lastStep = (
+    data: { result: string | ArrayBuffer | null; filename: string }[]
+  ) => {
+    console.log("last step");
+    console.log(data);
+    if (data[0].result !== null) {
+      // Ensure result is not null before proceeding
+      fetchFile({
+        filename: data[0].filename,
+        base64: data[0].result as string,
+      });
+      setAnchorEl(null);
+    }
+  };
 
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -102,7 +92,7 @@ const Clip = ({ fetchFile: {} }) => {
           sx={{
             height: "30px",
           }}
-          alt="attache file"
+          alt="attach file"
           src={"./images/icons/paperclip.png"}
         />
       </Button>
@@ -130,10 +120,7 @@ const Clip = ({ fetchFile: {} }) => {
         <MenuItem sx={{ justifyContent: "space-between" }}>
           <Box component="label" sx={{ cursor: "pointer" }}>
             Upload file
-            <VisuallyHiddenInput
-              type="file"
-              onChange={(e) => handleFileChange(e)}
-            />
+            <VisuallyHiddenInput type="file" onChange={handleFileChange} />
           </Box>
           <PictureAsPdfOutlinedIcon />
         </MenuItem>
@@ -148,7 +135,5 @@ const Clip = ({ fetchFile: {} }) => {
     </div>
   );
 };
+
 export default Clip;
-function fetchFile(arg0: { filename: any; base64: any }) {
-  throw new Error("Function not implemented.");
-}

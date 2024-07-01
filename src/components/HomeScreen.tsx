@@ -9,29 +9,38 @@ import {
   Typography,
   Collapse,
   FormControl,
-  styled,
   Stack,
 } from "@mui/material";
-import Footer from "./Footer";
 import Header from "./Header";
 import Clip from "./Clip";
-import { Fragment, useState, useRef, useEffect } from "react";
+import { Fragment, useState, useRef, useEffect, ChangeEvent } from "react";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import SendIcon from "@mui/icons-material/Send";
 import axios from "axios";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
-import { Qahiri } from "next/font/google";
 
-const HomeScreen = () => {
+interface FileObject {
+  filename?: string;
+  base64?: string;
+}
+
+interface AgentType {
+  name: string;
+  imagename: string;
+  placeholder: string;
+}
+
+interface Project {
+  name: string;
+  members: string;
+}
+
+const HomeScreen: React.FC = () => {
   const [agentPlaceholder, setAgentPlaceholder] = useState(
     "Message ChatGPT...|"
   );
-
-  const [uploadedFile, setUploadedFile] = useState<{
-    filename?: string;
-    base64?: string;
-  }>({});
+  const [uploadedFile, setUploadedFile] = useState<FileObject>({});
   const [query, setQuery] = useState("");
   const [previousQuery, setPreviousQuery] = useState("");
   const [thinking, setThinking] = useState(false);
@@ -39,14 +48,10 @@ const HomeScreen = () => {
   const [projectToggle, setProjectToggle] = useState(false);
   const [pageDisplay, setPageDisplay] = useState("none"); // page switch homePage and chatPage
   const [chatAgentIcon, setChatAgentIcon] = useState("Industry Expert");
-  const [chatItems, setChatItems] = useState([]);
-  //console.log({ chatItems });
+  const [chatItems, setChatItems] = useState<string[]>([]);
 
-  const chatBoxRef = useRef<HTMLDivElement | null>(null);
-  const queryInputRef = useRef<HTMLDivElement | null>(null);
-
-  const fetchFile = (fileObj: { filename: string; base64: string }) => {
-    setAgentPlaceholder("Ask me anythjing...");
+  const fetchFile = (fileObj: FileObject) => {
+    setAgentPlaceholder("Ask me anything...");
     setPageDisplay("revert");
     setUploadedFile(fileObj);
     return fileObj;
@@ -78,7 +83,7 @@ const HomeScreen = () => {
     color: "#7f8487",
   };
 
-  const agentTypes = [
+  const agentTypes: AgentType[] = [
     {
       name: "Industry Expert",
       imagename: "industry-expert",
@@ -116,7 +121,7 @@ const HomeScreen = () => {
     },
   ];
 
-  const projects = [
+  const projects: Project[] = [
     {
       name: "Woolworth Project",
       members: "20+ Members",
@@ -131,45 +136,37 @@ const HomeScreen = () => {
     },
   ];
 
-  const handleAgentClick = (agent: { placeholder: string }) => {
+  const handleAgentClick = (agent: AgentType) => {
     setAgentPlaceholder(agent.placeholder);
     setChatAgentIcon(agent.name);
   };
 
-  const handleKeyDown = (e) => {
-    console.log(e.target.value);
-    if (e.keyCode == 13 && e.target.value.length > 0) {
+  const handleKeyDown = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.code === "Enter" && e.target.value.length > 0) {
       handleApiCall(e.target.value);
     }
   };
 
   const scrollDown = () => {
-    document.querySelector("#chat-body").scrollTop =
-      document.querySelector("#chat-body").scrollHeight;
+    const chatBody = document.querySelector("#chat-body");
+    if (chatBody) {
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
   };
 
-  function scrollToBottom() {
-    const scrollHeight = document.querySelector("#chat-body").scrollHeight;
-    // Use setTimeout to allow DOM updates before scrolling
-    setTimeout(() => {
-      window.scrollTo(0, scrollHeight);
-    }, 0);
-  }
-
-  // handleApiCall =================================================================================================
   const handleApiCall = async (q: string) => {
     setQuery("");
     setChatItems((chatItems) => [...chatItems, q]);
     //get url from string
-    let url = "";
+    let url: string | undefined;
     url = q.split(" ").find((word) => word.startsWith("http"));
 
     setPageDisplay("revert");
     setPreviousQuery(q);
-    scrollToBottom();
+    scrollDown();
     setAgentPlaceholder("Ask follow up...");
 
-    if (url === undefined) {
+    if (!url) {
       setChatItems((chatItems) => [
         ...chatItems,
         "Topic is required, please include a URL in the chat, it should start with 'http'.",
@@ -193,17 +190,17 @@ const HomeScreen = () => {
 
       setChatItems((chatItems) => [...chatItems, responseData]);
 
-      scrollToBottom();
+      scrollDown();
     } catch (error) {
       console.error(error);
     }
     setThinking(false);
   };
-  // handleApiCall =================================================================================================
 
-  const handleChatAgentClick = (event) => {
-    console.log(event.target.innerText.replace(/\s+/g, "-").toLowerCase());
-    setChatAgentIcon(event.target.innerText);
+  const handleChatAgentClick = (event: React.MouseEvent<HTMLElement>) => {
+    const target = event.target as HTMLElement;
+    const agentName = target.innerText.replace(/\s+/g, "-").toLowerCase();
+    setChatAgentIcon(target.innerText);
   };
 
   useEffect(() => {
@@ -454,7 +451,7 @@ const HomeScreen = () => {
                 return (
                   <Box title={agent.name} key={i}>
                     <Typography
-                      onClick={() => handleChatAgentClick(event)}
+                      onClick={handleChatAgentClick}
                       display="inline"
                       sx={{
                         fontWeight:
@@ -524,9 +521,9 @@ const HomeScreen = () => {
                 {chatItems.map((c, i) => {
                   return (
                     <Typography
+                      key={i}
                       p={1}
                       mb={1}
-                      index={i}
                       sx={{
                         backgroundColor: i % 2 === 0 ? "#cfd8dc" : "#e0e0e0",
                         borderRadius: "10px",
@@ -588,7 +585,7 @@ const HomeScreen = () => {
             }}
           >
             {/* input */}
-            <Grid xs={9} sx={{}}>
+            <Grid xs={9}>
               <TextField
                 id="query"
                 variant="standard"
@@ -608,7 +605,7 @@ const HomeScreen = () => {
                   paddingRight: "20px",
                   paddingTop: "10px",
                 }}
-                onKeyDown={() => handleKeyDown(event)}
+                onKeyDown={handleKeyDown}
               />
             </Grid>
             {/* send icon */}

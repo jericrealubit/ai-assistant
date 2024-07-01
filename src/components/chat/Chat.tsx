@@ -1,6 +1,6 @@
 "use client";
 
-import { ChatMessageDto } from "@/model/ChatMessageDto";
+import React, { Fragment, useState, SetStateAction } from "react";
 import {
   Box,
   Container,
@@ -15,40 +15,41 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Fragment, SetStateAction, useEffect, useState } from "react";
-import "./Chat.css";
 import { Send } from "@mui/icons-material";
+import "./Chat.css";
 
-const Chat = () => {
+// Define the type for a chat message
+interface ChatMessage {
+  user: string;
+  message: string;
+}
+
+const Chat: React.FC = () => {
   const ENTER_KEY_CODE = 13;
 
-  const [chatMessages, setChatMessages] = useState([]);
-  const [user, setUser] = useState("");
-  const [message, setMessage] = useState("");
+  // Initialize the state with the correct type
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [user, setUser] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
 
-  const handleEnterKey = (event: { keycode: number }) => {
-    console.log({ event });
-    if (event.keycode === ENTER_KEY_CODE) {
+  const handleEnterKey = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.keyCode === ENTER_KEY_CODE) {
       sendMessage();
     }
   };
 
-  const handleMessageChange = (event: {
-    target: { value: SetStateAction<string> };
-  }) => {
+  const handleMessageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);
   };
 
-  const handleUserChange = (event: {
-    target: { value: SetStateAction<string> };
-  }) => {
+  const handleUserChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUser(event.target.value);
   };
 
   const sendMessage = () => {
     if (user && message) {
-      setChatMessages([
-        ...chatMessages,
+      setChatMessages((prevMessages) => [
+        ...prevMessages,
         {
           user,
           message,
@@ -59,15 +60,13 @@ const Chat = () => {
     }
   };
 
-  const listChatMessages = chatMessages.map(
-    (chatMessageDto: { user: String; message: string }, index) => (
-      <ListItem key={index}>
-        <ListItemText
-          primary={`${chatMessageDto.user}: ${chatMessageDto.message}`}
-        />
-      </ListItem>
-    )
-  );
+  const listChatMessages = chatMessages.map((chatMessageDto, index) => (
+    <ListItem key={index}>
+      <ListItemText
+        primary={`${chatMessageDto.user}: ${chatMessageDto.message}`}
+      />
+    </ListItem>
+  ));
 
   return (
     <Fragment>
@@ -94,7 +93,7 @@ const Chat = () => {
                 <FormControl fullWidth>
                   <TextField
                     onChange={handleMessageChange}
-                    onKeyDown={() => handleEnterKey}
+                    onKeyDown={handleEnterKey}
                     value={message}
                     label="Type your message..."
                     variant="outlined"
@@ -117,4 +116,5 @@ const Chat = () => {
     </Fragment>
   );
 };
+
 export default Chat;
