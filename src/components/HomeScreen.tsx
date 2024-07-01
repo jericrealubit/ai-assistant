@@ -707,7 +707,7 @@ const HomeScreen = () => {
                 </Box>
               )}
             </Grid>
-            {/* clip */}
+
             <Grid
               title="Attach File"
               xs={2}
@@ -721,10 +721,6 @@ const HomeScreen = () => {
             </Grid>
           </Grid>
         </FormControl>
-
-        {/* <Box ref={chatBoxRef} sx={{ padding: "20px" }}>
-          <Chat />
-        </Box> */}
 
         {/* <Footer /> */}
       </Container>
