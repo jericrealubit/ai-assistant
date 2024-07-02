@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import Header from "./Header";
 import Clip from "./Clip";
-import { Fragment, useState, useRef, useEffect, ChangeEvent } from "react";
+import { Fragment, useState, useRef, useEffect } from "react";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import SendIcon from "@mui/icons-material/Send";
 import axios from "axios";
@@ -49,6 +49,11 @@ const HomeScreen: React.FC = () => {
   const [pageDisplay, setPageDisplay] = useState("none"); // page switch homePage and chatPage
   const [chatAgentIcon, setChatAgentIcon] = useState("Industry Expert");
   const [chatItems, setChatItems] = useState<string[]>([]);
+  const [urlInput, setUrlInput] = useState("");
+  //console.log({ chatItems });
+
+  const chatBoxRef = useRef<HTMLDivElement | null>(null);
+  const queryInputRef = useRef<HTMLDivElement | null>(null);
 
   const fetchFile = (fileObj: FileObject) => {
     setAgentPlaceholder("Ask me anything...");
@@ -141,9 +146,12 @@ const HomeScreen: React.FC = () => {
     setChatAgentIcon(agent.name);
   };
 
-  const handleKeyDown = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.code === "Enter" && e.target.value.length > 0) {
-      handleApiCall(e.target.value);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter") {
+      const inputElement = e.target as HTMLInputElement;
+      if (inputElement.value.length > 0) {
+        handleApiCall(inputElement.value);
+      }
     }
   };
 
@@ -157,16 +165,20 @@ const HomeScreen: React.FC = () => {
   const handleApiCall = async (q: string) => {
     setQuery("");
     setChatItems((chatItems) => [...chatItems, q]);
+
     //get url from string
     let url: string | undefined;
     url = q.split(" ").find((word) => word.startsWith("http"));
+    if (url) {
+      setUrlInput(url);
+    }
 
     setPageDisplay("revert");
     setPreviousQuery(q);
     scrollDown();
     setAgentPlaceholder("Ask follow up...");
 
-    if (!url) {
+    if (!urlInput && !url) {
       setChatItems((chatItems) => [
         ...chatItems,
         "Topic is required, please include a URL in the chat, it should start with 'http'.",
@@ -174,12 +186,14 @@ const HomeScreen: React.FC = () => {
       return;
     }
 
+    const topic = !urlInput ? url : urlInput;
+
     setThinking(true);
     const data = {
       chat_history: chatItems,
       Agent: chatAgentIcon,
       question: q,
-      topic: url,
+      topic: topic,
     };
     // "https://s201.q4cdn.com/287523651/files/doc_financials/2023/ar/cost-annual-report-final-pdf-from-dfin.pdf",
 
@@ -218,7 +232,7 @@ const HomeScreen: React.FC = () => {
           maxWidth: "false",
           minWidth: "320px",
           height: "100vh",
-          margin: 0,
+          margin: "auto",
           overflow: "hidden",
           overflowY: "auto",
         }}
@@ -376,6 +390,12 @@ const HomeScreen: React.FC = () => {
             position: "absolute",
             width: "92%",
             display: pageDisplay,
+            maxWidth: {
+              lg: "50%",
+              md: "71%",
+              sm: "85%",
+              xs: "98%",
+            },
           }}
         >
           {/* chat-header */}
@@ -556,7 +576,6 @@ const HomeScreen: React.FC = () => {
         </Box>
 
         <FormControl
-          fullWidth
           sx={{
             backgroundColor: "white",
             borderRadius: "50px",
@@ -567,6 +586,12 @@ const HomeScreen: React.FC = () => {
             width: "92%",
             overflow: "hidden",
             pageDisplay: 2,
+            maxWidth: {
+              lg: "50%",
+              md: "71%",
+              sm: "85%",
+              xs: "98%",
+            },
           }}
         >
           <Grid
