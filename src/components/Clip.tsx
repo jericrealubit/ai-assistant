@@ -78,19 +78,19 @@ const Clip: React.FC<FetchFileProps> = ({ fetchFile }) => {
 
   return (
     <div>
-      <Button
+      <Button 
         id="basic-button"
         aria-controls={open ? "basic-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
-        sx={{ justifyContent: "right" }}
+        sx={{ justifyContent: "right", minWidth: "1px" }}
       >
-        <Box
+        <Box 
           title={"Attach file"}
           component="img"
           sx={{
-            height: "30px",
+            height: "30px"            
           }}
           alt="attach file"
           src={"./images/icons/paperclip.png"}
