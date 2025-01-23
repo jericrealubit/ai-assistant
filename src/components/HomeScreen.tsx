@@ -38,7 +38,7 @@ interface Project {
 
 const HomeScreen: React.FC = () => {
   const [agentPlaceholder, setAgentPlaceholder] = useState(
-    "Message ChatGPT...|"
+    "Message ChatGPT..."
   );
   const [uploadedFile, setUploadedFile] = useState<FileObject>({});
   const [query, setQuery] = useState("");
@@ -92,37 +92,37 @@ const HomeScreen: React.FC = () => {
     {
       name: "Industry Expert",
       imagename: "industry-expert",
-      placeholder: "Summarise and update on ...|",
+      placeholder: "Summarise and update on ...",
     },
     {
       name: "5 Year Old",
       imagename: "5-year-old",
-      placeholder: "Explain easily about ...|",
+      placeholder: "Explain easily about ...",
     },
     {
       name: "Notetaker",
       imagename: "notetaker",
-      placeholder: "Save this note about ...|",
+      placeholder: "Save this note about ...",
     },
     {
       name: "Journalist",
       imagename: "journalist",
-      placeholder: "Find the latest news on ...|",
+      placeholder: "Find the latest news on ...",
     },
     {
       name: "Scholar",
       imagename: "scholar",
-      placeholder: "Find the latest research on ...|",
+      placeholder: "Find the latest research on ...",
     },
     {
       name: "Creative",
       imagename: "creative",
-      placeholder: "Let's brainstorm ideas on ...|",
+      placeholder: "Let's brainstorm ideas on ...",
     },
     {
       name: "Analyst",
       imagename: "analyst",
-      placeholder: "Analyse this data on ...|",
+      placeholder: "Analyse this data on ...",
     },
   ];
 
@@ -223,7 +223,7 @@ const HomeScreen: React.FC = () => {
 
   return (
     <Fragment>
-      <Container
+      <Container maxWidth={false}
         sx={{
           border: "1px solid grey",
           borderRadius: "20px",
@@ -388,11 +388,7 @@ const HomeScreen: React.FC = () => {
             top: "85px",
             bottom: "23px",
             position: "absolute",
-            width: {
-              lg: "55%",
-              md: "90%",
-              sm: "95%",              
-            },
+            width: "90%",
             display: pageDisplay,            
           }}
         >
@@ -527,7 +523,7 @@ const HomeScreen: React.FC = () => {
               backgroundColor: "white",
               borderRadius: "20px",
               top: "190px",
-              width: { sx: "100%", md: "80%", lg: "80%"},
+              width: "100%",
               bottom: "-20px",
               position: "absolute",
               overflowY: "scroll",
@@ -581,11 +577,7 @@ const HomeScreen: React.FC = () => {
             height: "50px",
             bottom: "24px",
             position: "absolute",
-            width: {
-              lg: "45%",
-              md: "80%",
-              sm: "95%",              
-            },
+            width: "90%",
             overflow: "hidden",
             pageDisplay: 2,            
           }}
@@ -606,7 +598,7 @@ const HomeScreen: React.FC = () => {
             }}
           >
             {/* input */}
-            <Grid xs={9}>
+            <Grid xs={10}>
               <TextField
                 id="query"
                 variant="standard"
@@ -625,6 +617,7 @@ const HomeScreen: React.FC = () => {
                   paddingLeft: "20px",
                   paddingRight: "20px",
                   paddingTop: "10px",
+                  width: "100%"
                 }}
                 onKeyDown={handleKeyDown}
               />
@@ -664,11 +657,12 @@ const HomeScreen: React.FC = () => {
             {/* clip */}
             <Grid
               title="Attach File"
-              xs={2}
+              xs={1}
               sx={{
                 marginTop: "3px",
-                justifyContent: "right",
+                justifyContent: "left",
                 padding: 0,
+                minWidth: "5px"
               }}
             >
               <Clip fetchFile={fetchFile} />

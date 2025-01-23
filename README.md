@@ -7,7 +7,7 @@
 ![Product Name Screen Shot1][product-screenshot1]
 ![Product Name Screen Shot2][product-screenshot2]
 
-### URL: 
+### URL: https://ai-assistant-jeric.vercel.app/
 
 #### Presentation:
 
