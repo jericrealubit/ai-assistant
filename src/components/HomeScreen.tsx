@@ -388,14 +388,12 @@ const HomeScreen: React.FC = () => {
             top: "85px",
             bottom: "23px",
             position: "absolute",
-            width: "92%",
-            display: pageDisplay,
-            maxWidth: {
-              lg: "50%",
-              md: "71%",
-              sm: "85%",
-              xs: "98%",
+            width: {
+              lg: "55%",
+              md: "90%",
+              sm: "95%",              
             },
+            display: pageDisplay,            
           }}
         >
           {/* chat-header */}
@@ -529,7 +527,7 @@ const HomeScreen: React.FC = () => {
               backgroundColor: "white",
               borderRadius: "20px",
               top: "190px",
-              width: "100%",
+              width: { sx: "100%", md: "80%", lg: "80%"},
               bottom: "-20px",
               position: "absolute",
               overflowY: "scroll",
@@ -583,15 +581,13 @@ const HomeScreen: React.FC = () => {
             height: "50px",
             bottom: "24px",
             position: "absolute",
-            width: "92%",
-            overflow: "hidden",
-            pageDisplay: 2,
-            maxWidth: {
-              lg: "50%",
-              md: "71%",
-              sm: "85%",
-              xs: "98%",
+            width: {
+              lg: "45%",
+              md: "80%",
+              sm: "95%",              
             },
+            overflow: "hidden",
+            pageDisplay: 2,            
           }}
         >
           <Grid

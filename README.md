@@ -1,5 +1,36 @@
 # Datacom AI Assistant
 
+<!-- ABOUT THE PROJECT -->
+
+## About The Project
+
+[![Product Name Screen Shot1][product-screenshot1]]
+[![Product Name Screen Shot2][product-screenshot2]]
+
+### URL: https://missionready-m2.vercel.app/
+
+#### Presentation:
+
+### Built With
+
+[![Azure AI][azure-ai]][Azure-AI-Custom-Vision-url]
+[![Next.js][Next.js]][Next-url]
+[![vercel][vercel]][vercel-url]
+[![Material UI][mui]][mui-url]
+
+[azure-ai]: https://img.shields.io/badge/azure-ai-green?style=for-the-badge&logo=microsoft&logoColor=blue
+[Azure-AI-Custom-Vision-url]: https://azure.microsoft.com/en-us/products/ai-services/ai-custom-vision
+[typescript]: https://img.shields.io/badge/typescript-ts-blue?style=for-the-badge&logo=typescript&logoColor=blue
+[Typescript-url]: https://www.typescriptlang.org/
+[product-screenshot1]: public/images/ai1.png
+[product-screenshot2]: public/images/ai2.png
+[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
+[Next-url]: https://nextjs.org/
+[vercel]: https://img.shields.io/badge/vercel-white?style=for-the-badge&logo=vercel&logoColor=black
+[vercel-url]: https://vercel.com/
+[mui]: https://img.shields.io/badge/mui-ui?style=for-the-badge&logo=mui
+[mui-url]: https://mui.com/
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped using [`create-next-app`](https://github.com/vercel/next.js/tree/HEAD/packages/create-next-app) with Material UI installed.
 
 ## How to use
